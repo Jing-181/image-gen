@@ -1,7 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <title>灯还亮着 · 三扇亮着的窗</title>
-  <!-- 简化屋顶与三扇暖窗，在小尺寸中保留清楚的轮廓。 -->
-  <rect width="64" height="64" rx="16" fill="#f8f5ec"/>
-  <path d="M10 29 32 11 54 29v24H10Z" fill="#285b52"/>
-  <path d="M17 34h6v12h-6zm12 0h6v12h-6zm12 0h6v12h-6z" fill="#f4cb83"/>
+<title>灯还亮着 · 猫咪灯笺</title>
+<!-- 猫耳纸笺与暖灯火，大色块在标签页缩小时仍可辨识。 -->
+<rect x="2" y="2" width="60" height="60" rx="18" fill="#f7eedc"/>
+<path d="M12 26 14 9 27 19Q32 17 37 19L50 9 52 27V47Q51 55 42 55H22Q12 54 12 45Z" fill="#8fae9b" stroke="#355d50" stroke-width="3" stroke-linejoin="round"/>
+<path d="m17 16 2 11 6-5m22-6-2 11-6-5" fill="#ebc4b5"/>
+<path d="M25 38Q22 28 33 23Q42 33 37 38Z" fill="#ffdf90"/>
+<path d="M24 39H40L38 49H26Z" fill="#fff4d4"/>
+<path d="M20 35h-3m30 0h-3" stroke="#355d50" stroke-width="3" stroke-linecap="round"/>
 </svg>

@@ -14,7 +14,14 @@
       "portraitStatus": "candidate",
       "url": "https://jing-181.github.io/image-gen/#character/hanako",
       "avatar": "https://jing-181.github.io/image-gen/media/hanako-avatar-1731d2403bb6.webp",
-      "portrait": "https://jing-181.github.io/image-gen/media/hanako-portrait-d9e06b0bc25b.webp"
+      "portrait": "https://jing-181.github.io/image-gen/media/hanako-portrait-d9e06b0bc25b.webp",
+      "expression": {
+        "image": "https://jing-181.github.io/image-gen/media/hanako-expressions-7656f9e987c8.webp",
+        "frames": 3,
+        "frameDurationMs": 800,
+        "layout": "horizontal",
+        "status": "candidate"
+      }
     },
     {
       "id": "yuan",
@@ -24,7 +31,14 @@
       "portraitStatus": "candidate",
       "url": "https://jing-181.github.io/image-gen/#character/yuan",
       "avatar": "https://jing-181.github.io/image-gen/media/yuan-avatar-39956c732ee0.webp",
-      "portrait": "https://jing-181.github.io/image-gen/media/yuan-portrait-fb70147af403.webp"
+      "portrait": "https://jing-181.github.io/image-gen/media/yuan-portrait-fb70147af403.webp",
+      "expression": {
+        "image": "https://jing-181.github.io/image-gen/media/yuan-expressions-b980e58386f5.webp",
+        "frames": 3,
+        "frameDurationMs": 800,
+        "layout": "horizontal",
+        "status": "candidate"
+      }
     },
     {
       "id": "yuu",
@@ -34,10 +48,22 @@
       "portraitStatus": "candidate",
       "url": "https://jing-181.github.io/image-gen/#character/yuu",
       "avatar": "https://jing-181.github.io/image-gen/media/yuu-avatar-a896885f276b.webp",
-      "portrait": "https://jing-181.github.io/image-gen/media/yuu-portrait-0670aeb5c62d.webp"
+      "portrait": "https://jing-181.github.io/image-gen/media/yuu-portrait-0670aeb5c62d.webp",
+      "expression": {
+        "image": "https://jing-181.github.io/image-gen/media/yuu-expressions-9403839db8b5.webp",
+        "frames": 3,
+        "frameDurationMs": 800,
+        "layout": "horizontal",
+        "status": "candidate"
+      }
     }
   ],
   "features": [
+    {
+      "title": "日常小剧场",
+      "url": "https://jing-181.github.io/image-gen/#theatre",
+      "image": "https://jing-181.github.io/image-gen/media/hanako-expressions-7656f9e987c8.webp"
+    },
     {
       "title": "秘密房间",
       "url": "https://jing-181.github.io/image-gen/#rooms",
