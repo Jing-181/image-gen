@@ -1,1 +1,52 @@
-{"title": "三人小世界", "url": "https://jing-181.github.io/image-gen/", "story": "灯还亮着"}
+{
+  "schemaVersion": 1,
+  "title": "三人小世界",
+  "url": "https://jing-181.github.io/image-gen/",
+  "story": "灯还亮着",
+  "description": "Hanako、源与悠，三个性格不同的伙伴。",
+  "updatedAt": "2026-11-13",
+  "characters": [
+    {
+      "id": "hanako",
+      "name": "Hanako",
+      "role": "陪伴 · 统筹 · 判断",
+      "summary": "先听见心情，再一起理清问题。温柔，也有自己的判断。",
+      "portraitStatus": "candidate",
+      "url": "https://jing-181.github.io/image-gen/#character/hanako",
+      "avatar": "https://jing-181.github.io/image-gen/media/hanako-avatar-1731d2403bb6.webp",
+      "portrait": "https://jing-181.github.io/image-gen/media/hanako-portrait-d9e06b0bc25b.webp"
+    },
+    {
+      "id": "yuan",
+      "name": "源",
+      "role": "实现 · 调试 · 工程判断",
+      "summary": "把绕在一起的问题一根根解开。有把握的事说清楚，没把握的事就去验证。",
+      "portraitStatus": "candidate",
+      "url": "https://jing-181.github.io/image-gen/#character/yuan",
+      "avatar": "https://jing-181.github.io/image-gen/media/yuan-avatar-39956c732ee0.webp",
+      "portrait": "https://jing-181.github.io/image-gen/media/yuan-portrait-fb70147af403.webp"
+    },
+    {
+      "id": "yuu",
+      "name": "悠",
+      "role": "试玩 · 观察 · 产品视角",
+      "summary": "总想亲手试一试。哪里让人停住了，哪里还想再玩一次，她通常最先注意到。",
+      "portraitStatus": "candidate",
+      "url": "https://jing-181.github.io/image-gen/#character/yuu",
+      "avatar": "https://jing-181.github.io/image-gen/media/yuu-avatar-a896885f276b.webp",
+      "portrait": "https://jing-181.github.io/image-gen/media/yuu-portrait-0670aeb5c62d.webp"
+    }
+  ],
+  "features": [
+    {
+      "title": "秘密房间",
+      "url": "https://jing-181.github.io/image-gen/#rooms",
+      "image": "https://jing-181.github.io/image-gen/media/hanako-room-afe4af3d77dd.webp"
+    },
+    {
+      "title": "桌边的小分身",
+      "url": "https://jing-181.github.io/image-gen/#desk",
+      "image": "https://jing-181.github.io/image-gen/media/desk-b1a5cbcd9c55.webp"
+    }
+  ]
+}
