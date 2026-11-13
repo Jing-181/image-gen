@@ -40,3 +40,5 @@ dialog{border:0;border-radius:16px;width:min(520px,calc(100vw - 32px));padding:2
 /* 笔记本视口为章节标题、选择器和完整房间共同预留高度。 */
 @media(min-width:901px){#rooms{padding-top:40px}#rooms .chapter-heading{margin-bottom:24px}.workbench .scene{width:min(100%,580px,calc(100svh - 320px))}}
 .switches [aria-pressed=false]{background:var(--surface)!important;color:var(--ink)!important}.room-items button[aria-expanded=true]{background:transparent!important}.play-stage .expression{background-color:var(--paper)}
+/* 删除过程注脚后，仍为相邻操作保留清晰间距。 */
+.profile-expression button{margin-right:12px}.profile-gallery .text-link{margin-right:8px}
