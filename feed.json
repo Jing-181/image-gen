@@ -74,5 +74,22 @@
       "url": "https://jing-181.github.io/image-gen/#desk",
       "image": "https://jing-181.github.io/image-gen/media/desk-b1a5cbcd9c55.webp"
     }
-  ]
+  ],
+  "episodes": [
+    {
+      "id": "one-small-change",
+      "title": "说好只改一个小地方",
+      "summary": "悠想让一个小地方更可爱，展开的便签却比预想多。三人把想法分一分，商量这次先做什么，猫也带来了自己的提议。",
+      "cast": [
+        "hanako",
+        "yuan",
+        "yuu"
+      ],
+      "durationMs": 30000,
+      "updatedAt": "2026-11-13",
+      "cover": "https://jing-181.github.io/image-gen/media/theatre-cover-246a6e4fe710.webp",
+      "url": "https://jing-181.github.io/image-gen/#theatre/one-small-change"
+    }
+  ],
+  "latestEpisode": "one-small-change"
 }
