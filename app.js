@@ -8,7 +8,10 @@ const rooms=[
  {id:'yuu',name:'悠',title:'这个规则，可以重新发明吗？',intro:'桌游还没收起来，下一种玩法已经开始了。输赢可以再说，有没有意思现在就知道。',items:[['桌游','悠的新规则：最后一名可以给下一局起名字。于是大家开始认真争最后一名。',44,68],['掌机','暂停在最喜欢的一关。不是过不去，是想等你一起看。',79,55],['软木板','今天的试玩问题：如果没有分数，你还想继续玩吗？',12,26]]}
 ];
 function escapeText(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function openDetail(title,text,image){document.querySelector('#detail-body').innerHTML=`<h2>${escapeText(title)}</h2>${image?`<img src="${image}" alt="${escapeText(title)}">`:''}<p>${escapeText(text)}</p>${image?'<button data-zoom aria-pressed="false">查看原尺寸</button>':''}`;dialog.classList.remove('zoomed');dialog.showModal();if(image)dialog.querySelector('[data-zoom]').onclick=e=>{const zoomed=dialog.classList.toggle('zoomed');e.target.setAttribute('aria-pressed',String(zoomed));e.target.textContent=zoomed?'适应屏幕':'查看原尺寸';};dialog.classList.toggle('image-viewer',Boolean(image));}
+let photoViewer=null,detailTrigger=null;
+// 所有查看层共用焦点恢复与清理，切页后不保留旧相册状态。
+function prepareDetail(){photoViewer=null;if(!dialog.open)detailTrigger=document.activeElement;dialog.classList.remove('zoomed','photo-viewer','image-viewer');dialog.setAttribute('aria-labelledby','detail-title');}
+function openDetail(title,text,image){prepareDetail();document.querySelector('#detail-body').innerHTML=`<h2 id="detail-title">${escapeText(title)}</h2>${image?`<img src="${escapeText(image)}" alt="${escapeText(title)}">`:''}<p>${escapeText(text)}</p>${image?'<button data-zoom aria-pressed="false">查看原尺寸</button>':''}`;dialog.classList.toggle('image-viewer',Boolean(image));dialog.showModal();if(image)dialog.querySelector('[data-zoom]').onclick=e=>{const zoomed=dialog.classList.toggle('zoomed');e.target.setAttribute('aria-pressed',String(zoomed));e.target.textContent=zoomed?'适应屏幕':'查看原尺寸';};}
 function roomPage(index=0){const room=rooms[index];main.innerHTML=`<p class="eyebrow">日常 / 私藏的角落</p><h1>三间房，各自亮着灯。</h1><p class="intro">点开桌上的小物件，听一点平常不会说的话。</p><div class="switches" aria-label="选择房间">${rooms.map((r,i)=>`<button data-room="${i}" aria-pressed="${i===index}">${r.name} 的房间</button>`).join('')}</div><div class="workbench" data-character="${room.id}"><div class="scene"><img class="room-image" src="${assets[room.id+'-room']}" alt="${room.name} 的秘密房间">${room.items.map((item,i)=>`<button class="hotspot" style="left:calc(${item[2]}% - 22px);top:calc(${item[3]}% - 22px)" data-item="${i}" aria-label="查看${item[0]}">＋</button>`).join('')}</div><aside class="notes"><h2>${room.title}</h2><p>${room.intro}</p>${room.items.map((item,i)=>`<div class="note"><button data-item="${i}">${item[0]}</button></div>`).join('')}</aside></div>`;
 main.querySelectorAll('[data-room]').forEach(b=>b.onclick=()=>{roomPage(Number(b.dataset.room));main.querySelector(`[data-room="${b.dataset.room}"]`).focus();});main.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>openDetail(...room.items[Number(b.dataset.item)].slice(0,2)));}
 function deskPage(){main.innerHTML=`<p class="eyebrow">一起玩 / 桌边的小分身</p><h1>你的桌面，他们的游乐场。</h1><p class="intro">放下手头的事，陪这三个小人待一会儿。</p><div class="scene" id="desk-scene"><img src="${assets.desk}" alt="Hanako坐在书上，源研究键帽，悠探看显示器，猫在后方守着"></div><div class="switches desk-actions"><button data-action="read">读一页</button><button data-action="repair">研究键帽</button><button data-action="play">一起摸鱼</button><button data-action="cat">看看猫</button></div><div class="speech" role="status">Hanako：你来了。这里刚好还有一个位置。</div>`;const words={read:'Hanako：只读一页也可以。书又不会催你。\n悠：那再一页呢？\n源：这就是你上次读到凌晨的原因。',repair:'源：这个键帽没有坏。\n悠：那为什么拆下来？\n源：因为有人说它像一张小桌子。',play:'悠：今天的任务，找一件完全没用但很好玩的事。\n源：任务验收条件是什么？\nHanako：你刚刚笑了，就算。',cat:'悠：它是不是想加入？\n源：它想把整个桌面加入自己。\nHanako：先保住书。'};main.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>{const speech=main.querySelector('.speech');speech.innerText=words[b.dataset.action];const scene=main.querySelector('.scene');scene.classList.remove('respond');void scene.offsetWidth;scene.classList.add('respond');});}
@@ -22,6 +25,7 @@ history.scrollRestoration='manual';
 function captureView(){
  const snapshot={route:currentRoute,view:currentView,scrollY:window.scrollY};
  Object.assign(snapshot,{play:playController?.snapshot(),dailyChoice:main.querySelector('[data-choice][aria-pressed="true"]')?.dataset.choice,focusKey:document.activeElement?.dataset.focusKey});
+ if(currentView.startsWith('character/'))snapshot.openedAlbums=Array.from(main.querySelectorAll('details[data-album][open]'),album=>album.dataset.album);
  return snapshot;
 }
 function saveView(){
@@ -32,6 +36,7 @@ function saveView(){
 }
 function disposeView(){
  if(currentView==='home')homeState=captureView();
+ photoViewer=null;if(dialog.open)dialog.close();
  playController?.destroy();playController=null;
  viewCleanup.forEach(cleanup=>cleanup());viewCleanup=[];
 }
@@ -41,7 +46,7 @@ function render(saved=history.state?.world){
  const isHome=['home','characters','progress'].includes(requested);
  const restore=saved||(isHome&&requested==='home'?homeState:null);
  disposeView();currentRoute=requested;currentView=isHome?'home':requested;
- main.dataset.page=isHome?'home':requested.split('/')[0];
+  main.dataset.page=isHome?'home':requested.split(/[/?]/)[0];
  const profile=window.WORLD.profiles.find(p=>requested==='character/'+p.id);
  if(isHome){homePage();mountSelectedGallery();}
  else if(profile){profilePage(profile);mountSelectedGallery(profile.id);}
@@ -56,10 +61,13 @@ function render(saved=history.state?.world){
  else if(requested==='rooms')roomPage();
  else if(requested==='cabinet')cabinetPage();
  else{history.replaceState(null,'','#home');render(null);return;}
+ // 返回人物页时还原展开的相册，避免同一滚动位置落到其他内容。
+ if(profile&&restore?.openedAlbums)main.querySelectorAll('details[data-album]').forEach(album=>{album.open=restore.openedAlbums.includes(album.dataset.album);});
  if(!isHome&&!profile&&!requested.startsWith('theatre'))main.insertAdjacentHTML('beforeend',readingEnd());
  mountSharing();
  document.title=(main.querySelector('h1')?.textContent|| (profile?profile.name:requested==='story'?window.WORLD.episode.title:requested.startsWith('theatre')?window.WORLD.play.title:'三人的小小世界'))+' · 灯还亮着';
- document.querySelectorAll('nav a').forEach(a=>{const active=isHome?a.hash==='#home':profile||requested==='rooms'?a.hash==='#characters':a.hash==='#works';if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+ // 栏目高亮只更新页头，保留作品分类自身的选中状态。
+ document.querySelectorAll('header nav a').forEach(a=>{const active=isHome?a.hash==='#home':profile||requested==='rooms'?a.hash==='#characters':requested.startsWith('gallery')||requested==='beach'?a.hash==='#gallery':a.hash==='#works';if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
  requestAnimationFrame(()=>{if(turn!==navigation)return;
   if(restore){window.scrollTo({top:restore.scrollY||0,behavior:'instant'});if(restore.focusKey)main.querySelector(`[data-focus-key="${CSS.escape(restore.focusKey)}"]`)?.focus({preventScroll:true});}
   else if(isHome&&requested!=='home')document.getElementById(requested)?.scrollIntoView({behavior:'instant'});
@@ -77,7 +85,7 @@ document.addEventListener('click',event=>{
  const returning=link.hasAttribute('data-home-return')&&origin;
  const snapshot=returning?origin:null;
  const hash=returning?'#'+origin.route:link.hash;
- history.pushState({world:snapshot,origin:currentView==='home'||currentRoute.startsWith('works')||currentRoute.startsWith('character/')?captureView():origin},'',hash);
+ history.pushState({world:snapshot,origin:currentView==='home'||currentRoute.startsWith('works')||currentRoute.startsWith('character/')||currentRoute.startsWith('gallery')||currentRoute==='beach'?captureView():origin},'',hash);
  render(snapshot);
 });
 window.addEventListener('popstate',()=>render(history.state?.world));
@@ -98,12 +106,76 @@ function characterPage(){
  main.querySelectorAll('[data-sheet]').forEach(button=>button.onclick=()=>{const r=profiles[Number(button.dataset.sheet)];openDetail(r.name+' · 三视图',r.detail,assets[r.id+'-sheet']);});
 }
 
-// 详情共享公开资料源；图片候选状态不会影响三视图。
+// 旅行优先展开，日常收藏轻折叠；同一份合照可出现在三人的相册中。
+const photoAlbums={travel:'旅行与四季',daily:'日常片刻'};
+function photoGalleryMarkup(p){
+ if(!p.photos?.length)return '';
+ const e=escapeText;
+ const groups=Object.entries(photoAlbums).map(([id,label])=>{
+  const photos=p.photos.map((photo,index)=>({photo,index})).filter(({photo})=>(photo.album||'daily')===id);
+  if(!photos.length)return '';
+  const grid=`<div class="photo-grid">${photos.map(({photo,index},position)=>`<figure class="photo-card"><button class="photo-button" data-photo="${index}" aria-label="放大${e(p.name)}写真：${e(photo.title)}"><img loading="lazy" decoding="async" width="${photo.width}" height="${photo.height}" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) ${id==='travel'?'calc((100vw - 112px) / 3)':'calc((100vw - 104px) / 2)'}, 330px" data-src="${e(photo.sources[0].image)}" data-srcset="${e(photo.sources.map(source=>source.image+' '+source.width+'w').join(', '))}" alt="${e(photo.alt)}"><span class="photo-open" aria-hidden="true">放大查看 ↗</span></button><figcaption><span>${String(position+1).padStart(2,'0')}</span><h3>${e(photo.title)}</h3></figcaption><p class="photo-load-error" hidden role="status">图片暂时未能显示。<button data-photo-retry="${index}">重试</button></p></figure>`).join('')}</div>`;
+  return id==='daily'?`<details class="photo-album photo-daily" data-album="daily"><summary><span>${label}</span><span>${photos.length} 张</span></summary>${grid}</details>`:`<section class="photo-album" data-album="travel" aria-labelledby="travel-title"><div class="photo-album-heading"><h3 id="travel-title">${label}</h3><p>${photos.length} 张 · 去远一点的地方</p></div>${grid}</section>`;
+ }).join('');
+ return `<section class="personal-photos" aria-labelledby="photos-title"><div class="photo-heading"><div><p class="eyebrow">${e(p.name)} · 写真集</p><h2 id="photos-title">把喜欢的时光，留成照片。</h2></div></div>${groups}</section>`;
+}
+function mountPhotos(p){
+ if(!p.photos?.length)return;
+ const section=main.querySelector('.personal-photos');
+ section.querySelectorAll('[data-photo]').forEach(button=>{
+  const image=button.querySelector('img'),error=button.closest('figure').querySelector('.photo-load-error');
+  image.addEventListener('error',()=>{button.classList.add('photo-failed');error.hidden=false;});
+  image.addEventListener('load',()=>{button.classList.remove('photo-failed');error.hidden=true;});
+  button.onclick=()=>openPhotoViewer(p,Number(button.dataset.photo));
+ });
+ section.querySelectorAll('[data-photo-retry]').forEach(button=>button.onclick=()=>{
+  const image=button.closest('figure').querySelector('img');
+  image.removeAttribute('srcset');image.src=p.photos[Number(button.dataset.photoRetry)].image+'?retry='+Date.now();
+ });
+ // 展开后即记住状态，即使没有滚动就后退也能还原相册。
+ section.querySelectorAll('details[data-album]').forEach(album=>album.addEventListener('toggle',()=>{if(album.isConnected)saveView();}));
+ mountLazyMedia(section).observe();
+}
+function openPhotoViewer(profile,index){
+ prepareDetail();
+ const selected=profile.photos[index],album=selected.album||'daily';
+ const photos=profile.photos.filter(photo=>(photo.album||'daily')===album);
+ const state={index:photos.indexOf(selected),request:0,profile};photoViewer=state;
+ dialog.classList.add('image-viewer','photo-viewer');
+ document.querySelector('#detail-body').innerHTML=`<div class="photo-viewer-heading"><div><p class="eyebrow">${escapeText(profile.name)} · ${photoAlbums[album]}</p><h2 id="detail-title"></h2></div><span class="photo-count" aria-live="polite" aria-atomic="true"></span></div><div class="photo-stage" tabindex="0" aria-label="写真大图"><p class="photo-status" role="status">正在打开写真…</p></div><p class="photo-description"></p><div class="photo-toolbar"><div class="photo-step"><button data-photo-prev aria-label="上一张写真">← 上一张</button><button data-photo-next aria-label="下一张写真">下一张 →</button></div><div class="photo-tools"><button data-photo-zoom aria-pressed="false">查看原尺寸</button><a class="text-link" data-photo-download download>保存写真 ↓</a></div></div>`;
+ const previous=dialog.querySelector('[data-photo-prev]'),next=dialog.querySelector('[data-photo-next]'),zoom=dialog.querySelector('[data-photo-zoom]');
+ state.show=target=>{
+  if(photoViewer!==state||target<0||target>=photos.length)return;
+  state.index=target;
+  const photo=photos[target],request=++state.request,stage=dialog.querySelector('.photo-stage');
+  dialog.classList.remove('zoomed');zoom.setAttribute('aria-pressed','false');zoom.textContent='查看原尺寸';
+  dialog.querySelector('#detail-title').textContent=photo.title;
+  dialog.querySelector('.photo-count').textContent=`${target+1} / ${photos.length}`;
+  dialog.querySelector('.photo-description').textContent=photo.alt;
+  previous.disabled=target===0;next.disabled=target===photos.length-1;
+  if(previous.disabled&&document.activeElement===previous)next.focus({preventScroll:true});
+  if(next.disabled&&document.activeElement===next)previous.focus({preventScroll:true});
+  const download=dialog.querySelector('[data-photo-download]');download.href=photo.image;download.download=`${profile.id}-${photo.id}.webp`;
+  function load(retry=false){
+   if(photoViewer!==state||request!==state.request)return;
+   stage.innerHTML='<p class="photo-status" role="status">正在打开写真…</p>';stage.setAttribute('aria-busy','true');stage.scrollTo(0,0);
+   const image=new Image(photo.width,photo.height);image.alt=photo.alt;image.decoding='async';image.hidden=true;stage.append(image);
+   image.onload=()=>{if(photoViewer!==state||request!==state.request)return;stage.querySelector('.photo-status')?.remove();stage.setAttribute('aria-busy','false');image.hidden=false;};
+   image.onerror=()=>{if(photoViewer!==state||request!==state.request)return;stage.setAttribute('aria-busy','false');stage.innerHTML='<div class="photo-status" role="status"><p>写真暂时没能打开。</p><button data-photo-reload>重新加载</button></div>';stage.querySelector('[data-photo-reload]').onclick=()=>load(true);};
+   image.src=photo.image+(retry?'?retry='+Date.now():'');
+  }
+  load();
+ };
+ previous.onclick=()=>state.show(state.index-1);next.onclick=()=>state.show(state.index+1);
+ zoom.onclick=()=>{const zoomed=dialog.classList.toggle('zoomed');zoom.setAttribute('aria-pressed',String(zoomed));zoom.textContent=zoomed?'适应屏幕':'查看原尺寸';dialog.querySelector('.photo-stage').scrollTo(0,0);};
+ state.show(state.index);dialog.showModal();
+}
 // 一个人的画像、日常和房间放在同一条阅读路径里。
 function profilePage(p){
  const e=escapeText,r=rooms.find(r=>r.id===p.id);
  main.innerHTML=`<a class="back-link" data-home-return href="#home">← 回到刚才的位置</a>
  <section class="profile-hero" data-character="${p.id}"><button class="portrait-button" data-picture="${p.id}-portrait" aria-label="放大${e(p.name)}写真"><img class="profile-photo" width="1254" height="1254" src="${assets[p.id+'-portrait']}" alt="${e(p.name)}个人写真"></button><div><h1>${e(p.name)}</h1><h2>${e(p.quote)}</h2><p>${e(p.summary)}</p><p class="status">${e(p.voice)}</p>${shareMarkup()}</div></section>
+ ${photoGalleryMarkup(p)}
  <section class="personal-daily"><h2>平时的样子</h2><button class="scene-strip" data-picture="${p.id}-scene" aria-label="放大${e(p.name)}三格日常"><img loading="lazy" src="${assets[p.id+'-scene']}" width="${p.id==='yuu'?2188:2172}" height="724" alt="${e(p.name)}的三格日常"></button><details class="quiet-details"><summary>看看小表情</summary><div class="profile-expression"><div class="expression" data-background="${assets[p.id+'-expressions']}" role="img" aria-label="${e(p.name)}三帧表情"></div><button id="profile-replay">播放表情 ↻</button></div></details></section>
  <section class="personal-room"><h2>${e(p.name)}的房间</h2><p>${e(r.intro)}</p><div class="workbench" data-character="${p.id}"><div class="scene"><img loading="lazy" class="room-image" width="724" height="724" src="${assets[p.id+'-room']}" alt="${e(p.name)}的房间">${r.items.map((item,i)=>`<button class="hotspot" style="left:calc(${item[2]}% - 22px);top:calc(${item[3]}% - 22px)" data-note="${i}" aria-label="查看${item[0]}">＋</button>`).join('')}</div><div class="notes"><div class="room-items">${r.items.map((item,i)=>`<button data-note="${i}" aria-expanded="false">${item[0]} ＋</button>`).join('')}</div><p class="room-note" role="status">选一件小东西，读读它的手记。</p></div></div></section>
  <details class="quiet-details"><summary>更多画像与相处方式</summary><p>${e(p.help)}</p><p>${e(p.relations)}</p><div class="profile-gallery"><div><img class="profile-avatar" loading="lazy" src="${assets[p.id+'-avatar']}" alt="${e(p.name)}头像"><a class="text-link" href="${assets[p.id+'-avatar']}" download="${p.id}-avatar.webp">保存头像</a> <a class="text-link" href="${assets[p.id+'-portrait']}" download="${p.id}-portrait.webp">保存写真</a></div><button class="sheet-button" data-picture="${p.id}-sheet" aria-label="放大三视图"><img loading="lazy" src="${assets[p.id+'-sheet']}" alt="${e(p.name)}三视图"></button></div></details>
@@ -111,6 +183,7 @@ function profilePage(p){
  mountExpression(main.querySelector('.expression'),main.querySelector('#profile-replay'));
  main.querySelectorAll('[data-note]').forEach(b=>b.onclick=()=>{main.querySelector('.room-note').textContent=r.items[Number(b.dataset.note)][1];main.querySelectorAll('[data-note]').forEach(x=>x.setAttribute('aria-expanded',String(x.dataset.note===b.dataset.note)));});
  main.querySelectorAll('[data-picture]').forEach(b=>b.onclick=()=>openDetail(p.name,'',assets[b.dataset.picture]));
+ mountPhotos(p);
 }
 
 // 三帧沿用生活报的0.8秒节奏；用户点击播放，后台和离屏立即停止。
@@ -131,7 +204,7 @@ function homePage(){
  main.innerHTML=`<section class="arrival" id="home"><div><h1>灯还亮着，<br>进来坐一会儿。</h1><p>Hanako、源、悠。<br>三个伙伴，一些没用却喜欢的小事。</p></div><img src="${assets.desk}" width="1672" height="941" fetchpriority="high" alt="三位伙伴的桌边日常"></section>
  <section class="home-intros" id="characters"><h2>认识他们</h2><div class="home-people">${window.WORLD.profiles.map((p,i)=>`<a href="#character/${p.id}" data-focus-key="home-${p.id}"><img loading="lazy" src="${assets[p.id+'-avatar']}" width="900" height="900" alt="${p.name}"><div><h3>${p.name}</h3><p>${['先听你说，再一起想。','把问题拆开，认真做好。','先玩一遍，再换个玩法。'][i]}</p></div></a>`).join('')}</div></section>
  <section class="home-feature"><a href="#theatre/${play.id}" data-focus-key="home-feature" aria-label="看${escapeText(play.title)}"><img loading="lazy" width="1200" height="900" src="${play.cover}" alt="三人在旧书店的日常短剧"></a><div><p class="status">最近的一件事 · 日常短剧</p><h2>${escapeText(play.title)}</h2><p>${escapeText(play.summary)}</p><a class="text-link" href="#theatre/${play.id}">看这出戏</a><a class="plain-link" href="#works">所有故事与日常</a></div></section>
- <p class="home-news" id="progress">最近：五出新短剧、十段互动日常，以及《灯还亮着》的三篇新故事。</p>`;
+ <p class="home-news" id="progress">最近：${escapeText(window.WORLD.progress.items[0]?.text||'欢迎来看看三人的日常。')}</p>`;
 }
 // 分类写进地址，返回作品页时仍停留在原来的分类。
 function worksPage(filter='all'){
@@ -178,11 +251,13 @@ function mountSharing(){
 }
 // 原生 lazy 在长页可能提前取图；这里仅给邻近视口的图片设置 src。
 function mountLazyMedia(scope){
- const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;const image=entry.target;image.src=image.dataset.src;observer.unobserve(image);}},{rootMargin:'200px 0px'});
+ const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;const image=entry.target;if(image.dataset.srcset)image.srcset=image.dataset.srcset;image.src=image.dataset.src;observer.unobserve(image);}},{rootMargin:'200px 0px'});
  viewCleanup.push(()=>observer.disconnect());
  return {observe(root=scope){root.querySelectorAll('img[data-src]').forEach(image=>{if(!image.getAttribute('src'))observer.observe(image);});}};
 }
 // 点击遮罩关闭，原生 dialog 保持焦点约束与 Escape 操作。
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
+dialog.addEventListener('keydown',event=>{if(!photoViewer||dialog.classList.contains('zoomed')||event.altKey||event.ctrlKey||event.metaKey)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();photoViewer.show(photoViewer.index+(event.key==='ArrowLeft'?-1:1));}});
+dialog.addEventListener('close',()=>{if(dialog.open)return;photoViewer=null;dialog.classList.remove('zoomed','photo-viewer');if(detailTrigger?.isConnected)detailTrigger.focus({preventScroll:true});detailTrigger=null;});
 // 刷新作品深链视为新访问；历史前后退仍使用条目快照。
 render(null);

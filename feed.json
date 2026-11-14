@@ -15,6 +15,116 @@
       "url": "https://jing-181.github.io/image-gen/#character/hanako",
       "avatar": "https://jing-181.github.io/image-gen/media/hanako-avatar-1731d2403bb6.webp",
       "portrait": "https://jing-181.github.io/image-gen/media/hanako-portrait-d9e06b0bc25b.webp",
+      "photos": [
+        {
+          "id": "okinawa-summer",
+          "title": "海风翻过裙角",
+          "alt": "Hanako手持草帽走在冲绳海边，轻裙随风扬起，蓝绿海水和湿沙脚印延伸到远方。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-travel-01-3898dbb120c5.webp"
+        },
+        {
+          "id": "tromso-aurora",
+          "title": "等极光慢慢亮",
+          "alt": "Hanako裹着奶白冬外套与粉围巾，在特罗姆瑟雪地栈道双手捧热饮，抬眼看峡湾上空的极光。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-travel-02-fcd4bba70ad1.webp"
+        },
+        {
+          "id": "kyoto-rain",
+          "title": "雨停在京都",
+          "alt": "Hanako穿浅色风衣，撑透明伞走过京都木町屋与湿润石板路，远处可见塔的轮廓。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-travel-03-032fe6994f27.webp"
+        },
+        {
+          "id": "together-okinawa",
+          "title": "把日落走成一段路",
+          "alt": "Hanako、源和悠穿夏装沿冲绳海边散步，Hanako拿着草帽，悠指向远处，落日映在湿沙与海水上。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-01-5c002f3929e1.webp"
+        },
+        {
+          "id": "together-tromso",
+          "title": "一起等天空亮起来",
+          "alt": "三人裹着冬衣坐在特罗姆瑟雪地长椅上，Hanako捧热饮，源扶着暖灯，悠抬眼看极光，身后是峡湾与灯火。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-02-445c86c4eed8.webp"
+        },
+        {
+          "id": "together-shanghai",
+          "title": "把上海的夜色带回去",
+          "alt": "三人在上海外滩江边停留，Hanako握着相机，源侧头微笑，悠比出V手势，东方明珠与浦东天际线映在江面。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-03-26c37494ef52.webp"
+        },
+        {
+          "id": "window-light",
+          "title": "窗边，慢慢读",
+          "alt": "Hanako坐在暖光窗边的木椅上，双手轻放在膝上的猫脸书上，侧身望向窗外。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-01-0bba081f26b4.webp"
+        },
+        {
+          "id": "over-the-shoulder",
+          "title": "花店前的回眸",
+          "alt": "Hanako走过花店小巷，一手握着斜挎包带，回头轻轻微笑。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-02-1c2cb110a0b4.webp"
+        },
+        {
+          "id": "chin-rest",
+          "title": "听你慢慢说",
+          "alt": "Hanako在咖啡馆木桌边轻托脸颊，另一只手放在深蓝猫脸书上，望向镜头微笑。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-03-5a435560166d.webp"
+        },
+        {
+          "id": "doorway",
+          "title": "书店门口",
+          "alt": "Hanako倚在暖木色书店门框旁，一手轻握包带，身后是书架和午后阳光。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-04-cd216bec55bd.webp"
+        },
+        {
+          "id": "look-up",
+          "title": "石阶上的花影",
+          "alt": "Hanako坐在花园石阶上，双手自然放在裙上，向镜头轻轻抬眼，花叶停在画面边缘。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-05-f0b931d8a569.webp"
+        },
+        {
+          "id": "backlight",
+          "title": "晚风染上暖色",
+          "alt": "Hanako侧过脸轻轻微笑，傍晚逆光勾亮深棕卷发和粉色花饰，白猫耳耳机挂在颈间。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/hanako-photo-06-33b62038758e.webp"
+        }
+      ],
       "expression": {
         "image": "https://jing-181.github.io/image-gen/media/hanako-expressions-7656f9e987c8.webp",
         "frames": 3,
@@ -32,6 +142,116 @@
       "url": "https://jing-181.github.io/image-gen/#character/yuan",
       "avatar": "https://jing-181.github.io/image-gen/media/yuan-avatar-39956c732ee0.webp",
       "portrait": "https://jing-181.github.io/image-gen/media/yuan-portrait-fb70147af403.webp",
+      "photos": [
+        {
+          "id": "okinawa-summer",
+          "title": "冲绳·沿着潮线",
+          "alt": "源穿灰蓝薄外套与短裤，提着帆布袋走过冲绳的浅浪，身后是青蓝海水与珊瑚礁。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-travel-01-0aa9866ddd2a.webp"
+        },
+        {
+          "id": "tromso-aurora",
+          "title": "特罗姆瑟·等一束极光",
+          "alt": "源穿深蓝冬外套与围巾，提着一盏暖光营灯站在积雪峡湾边，抬头望向青绿与淡紫极光。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-travel-02-b06dced8bb77.webp"
+        },
+        {
+          "id": "erhai-breeze",
+          "title": "洱海·把风景留一会儿",
+          "alt": "源穿灰蓝外套倚着洱海边的白色石栏，手里垂着一台小相机，身后是湖水、苍山与白墙灰瓦。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-travel-03-fe75fe1ebec6.webp"
+        },
+        {
+          "id": "together-okinawa",
+          "title": "把日落走成一段路",
+          "alt": "Hanako、源和悠穿夏装沿冲绳海边散步，Hanako拿着草帽，悠指向远处，落日映在湿沙与海水上。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-01-5c002f3929e1.webp"
+        },
+        {
+          "id": "together-tromso",
+          "title": "一起等天空亮起来",
+          "alt": "三人裹着冬衣坐在特罗姆瑟雪地长椅上，Hanako捧热饮，源扶着暖灯，悠抬眼看极光，身后是峡湾与灯火。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-02-445c86c4eed8.webp"
+        },
+        {
+          "id": "together-shanghai",
+          "title": "把上海的夜色带回去",
+          "alt": "三人在上海外滩江边停留，Hanako握着相机，源侧头微笑，悠比出V手势，东方明珠与浦东天际线映在江面。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-03-26c37494ef52.webp"
+        },
+        {
+          "id": "window-light",
+          "title": "窗边片刻",
+          "alt": "源穿灰蓝外套坐在窗边，双手搭在膝上，望向窗外的柔光。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-01-69514caaa6e8.webp"
+        },
+        {
+          "id": "over-the-shoulder",
+          "title": "巷口回眸",
+          "alt": "源背着黑色背包，手扶肩带，在石墙与街灯之间回头望向镜头。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-02-31e62c87c793.webp"
+        },
+        {
+          "id": "chin-rest",
+          "title": "想一会儿",
+          "alt": "源坐在咖啡馆木桌边，单手托着脸颊看向镜头，桌上放着一只素色杯子。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-03-5f5e9ff561e3.webp"
+        },
+        {
+          "id": "doorway",
+          "title": "门边等你",
+          "alt": "源靠在蓝灰木门边，一手插着外套口袋，另一手扶着背包肩带。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-04-3de7b14c6372.webp"
+        },
+        {
+          "id": "look-up",
+          "title": "石阶上的抬眼",
+          "alt": "源坐在浅灰石阶上抬眼望向镜头，双手放松搭在膝前，背包放在身侧。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-05-4a2ea0017f21.webp"
+        },
+        {
+          "id": "backlight",
+          "title": "晚风里的微笑",
+          "alt": "夕阳沿源的灰黑发丝与外套勾出暖光，他稍侧身向镜头露出很轻的笑意。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuan-photo-06-fca414986dd8.webp"
+        }
+      ],
       "expression": {
         "image": "https://jing-181.github.io/image-gen/media/yuan-expressions-b980e58386f5.webp",
         "frames": 3,
@@ -49,6 +269,116 @@
       "url": "https://jing-181.github.io/image-gen/#character/yuu",
       "avatar": "https://jing-181.github.io/image-gen/media/yuu-avatar-a896885f276b.webp",
       "portrait": "https://jing-181.github.io/image-gen/media/yuu-portrait-0670aeb5c62d.webp",
+      "photos": [
+        {
+          "id": "okinawa-summer",
+          "title": "把脚印交给浪花",
+          "alt": "悠穿着轻薄条纹衬衫和深蓝短裤，在冲绳蓝绿海湾边赤脚踏浪，身后的湿沙留下一串脚印。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-travel-01-d7956f960a28.webp"
+        },
+        {
+          "id": "tromso-aurora",
+          "title": "把惊叹留给夜空",
+          "alt": "悠裹着象牙白羽绒服和薄荷围巾，站在特罗姆瑟雪岸双手捧热饮，抬眼看峡湾上空的绿色极光。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-travel-02-093c4842e893.webp"
+        },
+        {
+          "id": "montmartre-spring",
+          "title": "转过街角，刚好是春天",
+          "alt": "悠穿着浅米色旅行外套，拿着装有可颂的纸袋走下巴黎蒙马特的石阶，圣心堂白色圆顶和春日花树映在身后。",
+          "width": 1024,
+          "height": 1536,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-travel-03-927066f9e4e6.webp"
+        },
+        {
+          "id": "together-okinawa",
+          "title": "把日落走成一段路",
+          "alt": "Hanako、源和悠穿夏装沿冲绳海边散步，Hanako拿着草帽，悠指向远处，落日映在湿沙与海水上。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-01-5c002f3929e1.webp"
+        },
+        {
+          "id": "together-tromso",
+          "title": "一起等天空亮起来",
+          "alt": "三人裹着冬衣坐在特罗姆瑟雪地长椅上，Hanako捧热饮，源扶着暖灯，悠抬眼看极光，身后是峡湾与灯火。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-02-445c86c4eed8.webp"
+        },
+        {
+          "id": "together-shanghai",
+          "title": "把上海的夜色带回去",
+          "alt": "三人在上海外滩江边停留，Hanako握着相机，源侧头微笑，悠比出V手势，东方明珠与浦东天际线映在江面。",
+          "width": 1536,
+          "height": 1024,
+          "album": "travel",
+          "image": "https://jing-181.github.io/image-gen/media/group-photo-03-26c37494ef52.webp"
+        },
+        {
+          "id": "window-light",
+          "title": "窗边的好奇",
+          "alt": "悠戴着白色猫耳耳机坐在窗边木凳上，双手放在膝上，微笑望向窗外的绿意。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-01-7e06e6833391.webp"
+        },
+        {
+          "id": "over-the-shoulder",
+          "title": "回头，刚好看见你",
+          "alt": "悠背着黑色双肩包走在树影斑驳的小街上，轻握肩带，回头朝镜头微笑。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-02-7b236f948808.webp"
+        },
+        {
+          "id": "chin-rest",
+          "title": "听你说个好玩的",
+          "alt": "悠在阳光明亮的咖啡馆里托着脸微笑，一只手臂平放木桌，旁边是一杯清水。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-03-b36f171a0972.webp"
+        },
+        {
+          "id": "doorway",
+          "title": "门口的那束光",
+          "alt": "悠戴着白色猫耳耳机倚在浅薄荷色门框旁，一手插袋一手自然垂下，衬衫上落着日光树影。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-04-0f623d90c4de.webp"
+        },
+        {
+          "id": "look-up",
+          "title": "石阶上的小停顿",
+          "alt": "悠坐在洒着树影的浅灰石阶上，双手并排搭在膝头，戴着猫耳耳机抬眼微笑。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-05-4f320f56fb6e.webp"
+        },
+        {
+          "id": "backlight",
+          "title": "把光留在笑里",
+          "alt": "悠在傍晚树影前微笑，淡金逆光勾亮蓝黑发丝与白色猫耳耳机，背景浮着柔和光斑。",
+          "width": 1024,
+          "height": 1536,
+          "album": "daily",
+          "image": "https://jing-181.github.io/image-gen/media/yuu-photo-06-23c74478c779.webp"
+        }
+      ],
       "expression": {
         "image": "https://jing-181.github.io/image-gen/media/yuu-expressions-9403839db8b5.webp",
         "frames": 3,
@@ -95,6 +425,6 @@
   "gallery": {
     "title": "全部图集",
     "url": "https://jing-181.github.io/image-gen/#gallery",
-    "works": 36
+    "works": 66
   }
 }

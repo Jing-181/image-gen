@@ -87,6 +87,34 @@ main[data-page=theatre]{max-width:1100px}main[data-page=character]{max-width:112
 dialog.image-viewer.zoomed #detail-body{overflow:auto;max-height:70svh}
 dialog.image-viewer.zoomed img{max-width:none;max-height:none;width:auto}
 
+/* 写真按原比例展开，轻按钮只在悬停与按下时反馈。 */
+.personal-photos{margin:56px 0 64px;padding-top:32px;border-top:1px solid var(--line)}
+.photo-heading{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:24px}
+.photo-heading h2{font-size:clamp(27px,3vw,34px);margin:8px 0 0}.photo-heading p{font-size:13px;color:var(--muted);margin:0}
+.photo-album-heading{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin:28px 0 20px}.photo-album-heading h3{font-size:23px;margin:0}.photo-album-heading p{font-size:12px;color:var(--muted);margin:0}
+.photo-daily{border-block:1px solid var(--line);margin-top:32px}.photo-daily summary{display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;min-height:64px;padding:14px 0;list-style:none}.photo-daily summary::-webkit-details-marker{display:none}.photo-daily summary>span:first-child{font:23px/1.4 var(--display)}.photo-daily summary>span:last-child{font-size:12px;color:var(--muted);margin-left:auto}.photo-daily summary::after{content:'＋';font-size:20px;color:var(--accent)}.photo-daily[open] summary::after{content:'−'}.photo-daily summary:hover{color:var(--accent)}.photo-daily summary:active{background:var(--surface)}.photo-daily[open] .photo-grid{padding:12px 0 28px}
+.photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 24px}
+.photo-card{margin:0;min-width:0}.photo-card .photo-button{position:relative;display:block;width:100%;padding:0!important;border:0;border-radius:8px!important;background:var(--surface)!important;overflow:hidden;box-shadow:none}
+.photo-card .photo-button img{display:block;width:100%;height:auto;object-fit:contain;transition:filter .16s var(--ease)}
+.photo-card .photo-button:hover img{filter:brightness(1.035)}.photo-card .photo-button:active{transform:scale(.985)!important}
+.photo-card .photo-button:focus-visible{outline-offset:4px}.photo-open{position:absolute;right:10px;bottom:10px;background:var(--paper);border-radius:18px;padding:6px 10px;font:12px/1.5 var(--body);opacity:0;transition:opacity .16s}
+.photo-button:hover .photo-open,.photo-button:focus-visible .photo-open{opacity:1}
+.photo-card figcaption{display:flex;align-items:baseline;gap:12px;padding:12px 0 0}.photo-card figcaption>span{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}.photo-card h3{font-size:20px;font-weight:400;margin:0}
+.photo-load-error{font-size:13px;color:var(--muted);margin:8px 0}.photo-load-error button{padding:8px 12px!important}.photo-button.photo-failed img{visibility:hidden}.photo-button.photo-failed .photo-open{opacity:1;left:12px;right:auto}
+/* 查看器的图片区域独立滚动，原尺寸模式不挤走关闭与翻页按钮。 */
+dialog.photo-viewer{width:min(1080px,calc(100vw - 32px));max-height:94svh;padding:18px 24px 24px}
+dialog.photo-viewer form{position:absolute;top:12px;right:16px;margin:0}dialog.photo-viewer #detail-body,dialog.photo-viewer.zoomed #detail-body{max-height:none;overflow:visible}
+.photo-viewer-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px;padding-right:56px}.photo-viewer-heading .eyebrow{font-size:12px;line-height:1.5;margin:0 0 6px;color:var(--muted)}.photo-viewer-heading h2{font-size:27px;margin:0}.photo-count{color:var(--muted);font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.photo-stage{position:relative;display:flex;align-items:center;justify-content:center;height:clamp(200px,calc(94svh - 220px),850px);overflow:auto;background:var(--surface);border-radius:6px;overscroll-behavior:contain}
+dialog.photo-viewer .photo-stage img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;border-radius:0;object-fit:contain}
+dialog.photo-viewer .photo-stage img[hidden]{display:none}dialog.photo-viewer.zoomed .photo-stage{display:block}dialog.photo-viewer.zoomed .photo-stage img{max-width:none;max-height:none;width:auto;height:auto;margin:0}
+.photo-status{padding:24px;text-align:center;color:var(--muted)}.photo-status p{margin-top:0}.photo-description{font-size:13px!important;line-height:1.7!important;color:var(--muted);margin:12px 0 16px;max-width:none}
+.photo-toolbar,.photo-step,.photo-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.photo-toolbar{justify-content:space-between;gap:12px}.photo-toolbar button,.photo-toolbar .text-link{margin:0;padding:10px 16px!important;min-height:44px;font-size:13px!important}.photo-toolbar button:disabled{opacity:.4;cursor:default;transform:none!important;background:var(--surface)!important}
+/* 平板的主题三张一排，竖图与横向合照不混行；日常仍为双列。 */
+@media(min-width:601px) and (max-width:900px){.photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}[data-album=travel] .photo-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 16px}[data-album=travel] .photo-card h3{font-size:18px}}
+@media(max-width:600px){.personal-photos{margin:32px 0 40px;padding-top:24px}.photo-heading{display:block}.photo-heading>p{margin-top:12px}.photo-grid{grid-template-columns:minmax(0,1fr);gap:28px}.photo-open{opacity:1}.photo-card h3{font-size:23px}dialog.photo-viewer{padding:12px 16px 16px}.photo-viewer-heading{margin-bottom:12px}.photo-viewer-heading h2{font-size:25px}.photo-stage{height:clamp(180px,calc(94svh - 312px),650px)}.photo-toolbar{justify-content:center}.photo-step,.photo-tools{justify-content:center;flex:1 1 100%}.photo-toolbar button,.photo-toolbar .text-link{padding:10px 14px!important}.photo-description{margin:10px 0 12px}}
+/* 横屏手机优先留住操作栏，图片可切到原尺寸再滚动细看。 */
+@media(max-height:520px) and (orientation:landscape){dialog.photo-viewer{padding:12px 20px}.photo-viewer-heading{margin-bottom:10px}.photo-viewer-heading .eyebrow,.photo-description{display:none}.photo-viewer-heading h2{font-size:24px}.photo-stage{height:calc(94svh - 138px);min-height:100px}.photo-toolbar{margin-top:12px;flex-wrap:nowrap;gap:8px}.photo-step,.photo-tools{flex:0 1 auto;gap:4px}.photo-toolbar button,.photo-toolbar .text-link{font-size:12px!important;padding:8px 12px!important;white-space:nowrap}}
 /* 内容入口保持紧凑；漫画在窄屏逐格阅读，文字不压进图片。 */
 .work-filters{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 36px}
 .work-filters a{padding:10px 14px;border:1px solid #b9ada0;border-radius:4px;text-decoration:none;transition:background .15s,transform .15s}
