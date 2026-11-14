@@ -21,7 +21,7 @@ const sections=['home','characters','rooms','theatre','desk','cabinet','progress
 history.scrollRestoration='manual';
 function captureView(){
  const snapshot={route:currentRoute,view:currentView,scrollY:window.scrollY};
- Object.assign(snapshot,{play:playController?.snapshot(),focusKey:document.activeElement?.dataset.focusKey});
+ Object.assign(snapshot,{play:playController?.snapshot(),dailyChoice:main.querySelector('[data-choice][aria-pressed="true"]')?.dataset.choice,focusKey:document.activeElement?.dataset.focusKey});
  return snapshot;
 }
 function saveView(){
@@ -45,7 +45,10 @@ function render(saved=history.state?.world){
  const profile=window.WORLD.profiles.find(p=>requested==='character/'+p.id);
  if(isHome)homePage();
  else if(profile)profilePage(profile);
- else if(requested==='works')worksPage();
+ else if(requested==='works'||requested.startsWith('works/'))worksPage(requested.split('/')[1]);
+ else if(requested.startsWith('daily/')&&window.WORLD.season.daily.some(p=>requested==='daily/'+p.id))dailyPage(window.WORLD.season.daily.find(p=>requested==='daily/'+p.id),restore);
+ else if(requested.startsWith('comic/')&&window.WORLD.season.comics.some(p=>requested==='comic/'+p.id))comicPage(window.WORLD.season.comics.find(p=>requested==='comic/'+p.id));
+ else if(requested.startsWith('theatre/')&&window.WORLD.season.plays.some(p=>requested==='theatre/'+p.id))playPage(restore,window.WORLD.season.plays.find(p=>requested==='theatre/'+p.id));
  else if(requested==='theatre'||requested==='theatre/'+window.WORLD.play.id)playPage(restore);
  else if(requested==='story')storyPage();
  else if(requested==='desk')deskPage();
@@ -54,7 +57,7 @@ function render(saved=history.state?.world){
  else{history.replaceState(null,'','#home');render(null);return;}
  if(!isHome&&!profile&&!requested.startsWith('theatre'))main.insertAdjacentHTML('beforeend',readingEnd());
  mountSharing();
- document.title=(profile?profile.name:requested==='story'?window.WORLD.episode.title:requested.startsWith('theatre')?window.WORLD.play.title:'三人的小小世界')+' · 灯还亮着';
+ document.title=(main.querySelector('h1')?.textContent|| (profile?profile.name:requested==='story'?window.WORLD.episode.title:requested.startsWith('theatre')?window.WORLD.play.title:'三人的小小世界'))+' · 灯还亮着';
  document.querySelectorAll('nav a').forEach(a=>{const active=isHome?a.hash==='#home':profile||requested==='rooms'?a.hash==='#characters':a.hash==='#works';if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
  requestAnimationFrame(()=>{if(turn!==navigation)return;
   if(restore){window.scrollTo({top:restore.scrollY||0,behavior:'instant'});if(restore.focusKey)main.querySelector(`[data-focus-key="${CSS.escape(restore.focusKey)}"]`)?.focus({preventScroll:true});}
@@ -73,7 +76,7 @@ document.addEventListener('click',event=>{
  const returning=link.hasAttribute('data-home-return')&&origin;
  const snapshot=returning?origin:null;
  const hash=returning?'#'+origin.route:link.hash;
- history.pushState({world:snapshot,origin:currentView==='home'||currentRoute==='works'||currentRoute.startsWith('character/')?captureView():origin},'',hash);
+ history.pushState({world:snapshot,origin:currentView==='home'||currentRoute.startsWith('works')||currentRoute.startsWith('character/')?captureView():origin},'',hash);
  render(snapshot);
 });
 window.addEventListener('popstate',()=>render(history.state?.world));
@@ -123,23 +126,44 @@ function mountExpression(el,button){
 }
 // 首页只保留欢迎、人物、单个推荐和一行近况。
 function homePage(){
- const play=window.WORLD.play;
+ const play=window.WORLD.season.plays[0]||window.WORLD.play;
  main.innerHTML=`<section class="arrival" id="home"><div><h1>灯还亮着，<br>进来坐一会儿。</h1><p>Hanako、源、悠。<br>三个伙伴，一些没用却喜欢的小事。</p></div><img src="${assets.desk}" width="1672" height="941" fetchpriority="high" alt="三位伙伴的桌边日常"></section>
  <section class="home-intros" id="characters"><h2>认识他们</h2><div class="home-people">${window.WORLD.profiles.map((p,i)=>`<a href="#character/${p.id}" data-focus-key="home-${p.id}"><img loading="lazy" src="${assets[p.id+'-avatar']}" width="900" height="900" alt="${p.name}"><div><h3>${p.name}</h3><p>${['先听你说，再一起想。','把问题拆开，认真做好。','先玩一遍，再换个玩法。'][i]}</p></div></a>`).join('')}</div></section>
- <section class="home-feature"><a href="#theatre/${play.id}" data-focus-key="home-feature" aria-label="看${escapeText(play.title)}"><img loading="lazy" width="1200" height="900" src="${play.cover}" alt="三人的第一出日常短剧"></a><div><p class="status">最近的一件事 · 日常短剧</p><h2>${escapeText(play.title)}</h2><p>${escapeText(play.summary)}</p><a class="text-link" href="#theatre/${play.id}">看这出戏</a><a class="plain-link" href="#works">所有故事与日常</a></div></section>
- <p class="home-news" id="progress">最近：三人的房间与小日常，收进各自的介绍页了。</p>`;
+ <section class="home-feature"><a href="#theatre/${play.id}" data-focus-key="home-feature" aria-label="看${escapeText(play.title)}"><img loading="lazy" width="1200" height="900" src="${play.cover}" alt="三人在旧书店的日常短剧"></a><div><p class="status">最近的一件事 · 日常短剧</p><h2>${escapeText(play.title)}</h2><p>${escapeText(play.summary)}</p><a class="text-link" href="#theatre/${play.id}">看这出戏</a><a class="plain-link" href="#works">所有故事与日常</a></div></section>
+ <p class="home-news" id="progress">最近：五出新短剧、十段互动日常，以及《灯还亮着》的三篇新故事。</p>`;
 }
-function worksPage(){
- const p=window.WORLD.play;
- main.innerHTML=`<h1>故事与日常</h1><p class="intro">挑一件喜欢的小事，慢慢看。</p><div class="work-list">${[
- ['theatre/'+p.id,p.cover,p.title,'日常短剧',p.summary],
- ['story',assets.clock,window.WORLD.episode.title,'十二格漫画','一只不必调准的旧钟，一段被认真留下的时间。'],
- ['desk',assets.desk,'桌边的小分身','互动日常','读一页书，研究键帽，或者一起发呆。']
- ].map(([route,image,title,type,summary])=>`<article><a href="#${route}" aria-label="阅读${escapeText(title)}"><img loading="lazy" src="${image}" alt="${escapeText(title)}"></a><div><p class="status">${type}</p><h2><a href="#${route}">${escapeText(title)}</a></h2><p>${escapeText(summary)}</p></div></article>`).join('')}</div>`;
+// 分类写进地址，返回作品页时仍停留在原来的分类。
+function worksPage(filter='all'){
+ const e=escapeText,season=window.WORLD.season,p=window.WORLD.play;
+ const items=[...season.plays.map(p=>({...p,type:'plays',route:'theatre/'+p.id,image:p.cover})),
+ ...season.comics.map(p=>({...p,type:'comics',route:'comic/'+p.id,image:p.cover})),
+ ...season.daily.map(p=>({...p,type:'daily',route:'daily/'+p.id})),
+ {type:'plays',route:'theatre/'+p.id,image:p.cover,title:p.title,summary:p.summary},
+ {type:'comics',route:'story',image:assets.clock,title:window.WORLD.episode.title,summary:'一只不必调准的旧钟，一段被认真留下的时间。'},
+ {type:'daily',route:'desk',image:assets.desk,title:'桌边的小分身',summary:'读一页书，研究键帽，或者一起发呆。'}];
+ const labels={all:'全部',plays:'日常短剧',daily:'互动日常',comics:'灯还亮着 · 漫画'};
+ if(!labels[filter])filter='all';
+ main.innerHTML=`<h1>故事与日常</h1><p class="intro">书店慢慢交接，日子照常往前。挑一件小事，坐下来看看。</p><nav class="work-filters" aria-label="作品分类">${Object.entries(labels).map(([key,label])=>`<a href="#works/${key}" ${key===filter?'aria-current="true"':''}>${label}<span>${key==='all'?items.length:items.filter(p=>p.type===key).length}</span></a>`).join('')}</nav><div class="work-list">${items.filter(p=>filter==='all'||p.type===filter).map(p=>`<article><a href="#${p.route}" data-focus-key="work-${p.route}" aria-label="阅读${e(p.title)}"><img loading="lazy" src="${p.image}" alt="${e(p.title)}"></a><div><p class="status">${labels[p.type]}</p><h2><a href="#${p.route}">${e(p.title)}</a></h2><p>${e(p.summary)}</p></div></article>`).join('')}</div>`;
 }
-function playPage(saved){
- main.innerHTML=`<a class="back-link" href="#works">← 故事与日常</a><h1>${escapeText(window.WORLD.play.title)}</h1><div id="mini-play"></div>${readingEnd()}`;
- playController=window.WorldTheatre.mount(main.querySelector('#mini-play'),window.WORLD.play,{profiles:window.WORLD.profiles,initial:saved?.play,onState:()=>requestAnimationFrame(saveView)});
+function playPage(saved,play=window.WORLD.play){
+ main.innerHTML=`<a class="back-link" href="#works/plays">← 日常短剧</a><h1>${escapeText(play.title)}</h1><div id="mini-play"></div>${readingEnd()}`;
+ playController=window.WorldTheatre.mount(main.querySelector('#mini-play'),play,{profiles:window.WORLD.profiles,initial:saved?.play,onState:()=>requestAnimationFrame(saveView)});
+}
+// 选择没有分数或解锁条件；每段回应可以立即读完。
+function dailyPage(scene,saved){
+ const e=escapeText;
+ main.innerHTML=`<div class="daily-reader"><a class="back-link" href="#works/daily">← 互动日常</a><p class="eyebrow">桌边的一小会儿</p><h1>${e(scene.title)}</h1><p class="intro">${e(scene.summary)}</p>${shareMarkup()}<button class="daily-picture" aria-label="放大${e(scene.title)}"><img src="${scene.image}" alt="${e(scene.title)}的书店日常"></button><div class="switches daily-choices" aria-label="选一个动作">${scene.choices.map((c,i)=>`<button data-choice="${i}" data-focus-key="choice-${i}" aria-pressed="false">${e(c.label)}</button>`).join('')}</div><p class="speech daily-response" role="status" aria-live="polite">选一个动作，听听他们怎么说。</p></div>`;
+ function choose(index){main.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.choice)===index)));main.querySelector('.daily-response').textContent=scene.choices[index].response;saveView();}
+ main.querySelectorAll('[data-choice]').forEach(b=>b.onclick=()=>choose(Number(b.dataset.choice)));
+ main.querySelector('.daily-picture').onclick=()=>openDetail(scene.title,'',scene.image);
+ if(saved?.dailyChoice!==undefined&&scene.choices[Number(saved.dailyChoice)])choose(Number(saved.dailyChoice));
+}
+// 漫画按页阅读，格外对白保持可选中和可朗读；整页图可放大。
+function comicPage(ep){
+ const e=escapeText;
+ main.innerHTML=`<div class="reader comic-reader"><a class="back-link" href="#works/comics">← 灯还亮着</a><p class="eyebrow">旧书店交接手记 · 三页漫画</p><h1>${e(ep.title)}</h1><p class="intro">${e(ep.summary)}</p>${shareMarkup()}${ep.pages.map((page,p)=>`<section class="comic-page"><div class="comic-page-heading"><h2>第 ${p+1} 页</h2><button data-sheet-page="${p}">看整页画面 ↗</button></div><div class="comic-grid">${ep.panels.filter(panel=>panel.page===p+1).map((panel,i)=>`<figure><button data-comic-panel="${p*6+i}" aria-label="放大第${p*6+i+1}格"><img loading="lazy" src="${panel.image}" alt="${e(panel.caption)}"></button><figcaption><p class="comic-action">${e(panel.caption)}</p>${panel.text?`<p class="comic-line">${e(panel.text)}</p>`:''}</figcaption></figure>`).join('')}</div></section>`).join('')}<p class="status">这一篇，到这里。</p></div>`;
+ main.querySelectorAll('[data-sheet-page]').forEach(b=>b.onclick=()=>openDetail(ep.title+' · 第'+(Number(b.dataset.sheetPage)+1)+'页','',ep.pages[Number(b.dataset.sheetPage)]));
+ main.querySelectorAll('[data-comic-panel]').forEach(b=>b.onclick=()=>{const p=ep.panels[Number(b.dataset.comicPanel)];openDetail(p.caption,p.text,p.image);});
 }
 function readingEnd(){return `<div class="reading-end"><a href="#works">再看一篇</a><a data-home-return href="#home">回到刚才的位置</a></div>`;}
 function shareMarkup(){return `<div class="share-link"><button data-copy-page>复制链接</button><span role="status"></span><input hidden readonly aria-label="本页链接"></div>`;}

@@ -86,3 +86,16 @@ main[data-page=theatre]{max-width:1100px}main[data-page=character]{max-width:112
 /* 放大图允许按原尺寸滚动阅读，关闭后由 dialog 恢复触发点焦点。 */
 dialog.image-viewer.zoomed #detail-body{overflow:auto;max-height:70svh}
 dialog.image-viewer.zoomed img{max-width:none;max-height:none;width:auto}
+
+/* 内容入口保持紧凑；漫画在窄屏逐格阅读，文字不压进图片。 */
+.work-filters{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 36px}
+.work-filters a{padding:10px 14px;border:1px solid #b9ada0;border-radius:4px;text-decoration:none;transition:background .15s,transform .15s}
+.work-filters a span{margin-left:8px;font-size:.8em;opacity:.7}
+.work-filters a[aria-current]{background:#e7dfd0;border-color:#786c5c}
+.work-filters a:active,.daily-picture:active,.comic-grid button:active{transform:scale(.98)}
+.daily-reader{max-width:900px;margin:auto}.daily-picture{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}.daily-picture img{display:block;width:100%;height:auto;border-radius:5px}
+.daily-choices{margin-top:24px}.daily-response{min-height:100px;white-space:pre-line;line-height:1.9}.daily-choices button[aria-pressed=true]{background:#e7dfd0;border-color:#786c5c}
+.comic-reader{max-width:1080px}.comic-page{margin:48px 0 64px}.comic-page-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}.comic-page-heading h2{font-size:1.2rem;margin:0}
+.comic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 16px}.comic-grid figure{margin:0;min-width:0}.comic-grid button{display:block;padding:0;border:0;background:none;width:100%;cursor:zoom-in}.comic-grid img{display:block;width:100%;height:auto}.comic-action{font-size:.85rem;color:#62594f;line-height:1.7}.comic-line{white-space:pre-line;font-size:1rem;line-height:1.85}.comic-grid figcaption{padding:0 3px}
+@media(max-width:700px){.comic-grid{grid-template-columns:1fr;gap:32px}.comic-reader{max-width:460px}.comic-page{margin-top:32px}.work-filters{gap:8px}.work-filters a{padding:9px 10px}.daily-response{min-height:140px}}
+@media(prefers-reduced-motion:reduce){.work-filters a{transition:none}}
