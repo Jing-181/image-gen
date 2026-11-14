@@ -91,5 +91,10 @@
       "url": "https://jing-181.github.io/image-gen/#theatre/one-small-change"
     }
   ],
-  "latestEpisode": "one-small-change"
+  "latestEpisode": "one-small-change",
+  "gallery": {
+    "title": "全部图集",
+    "url": "https://jing-181.github.io/image-gen/#gallery",
+    "works": 36
+  }
 }

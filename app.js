@@ -43,8 +43,9 @@ function render(saved=history.state?.world){
  disposeView();currentRoute=requested;currentView=isHome?'home':requested;
  main.dataset.page=isHome?'home':requested.split('/')[0];
  const profile=window.WORLD.profiles.find(p=>requested==='character/'+p.id);
- if(isHome)homePage();
- else if(profile)profilePage(profile);
+ if(isHome){homePage();mountSelectedGallery();}
+ else if(profile){profilePage(profile);mountSelectedGallery(profile.id);}
+ else if(requested==='gallery'||requested.startsWith('gallery?')||requested==='beach')galleryPage();
  else if(requested==='works'||requested.startsWith('works/'))worksPage(requested.split('/')[1]);
  else if(requested.startsWith('daily/')&&window.WORLD.season.daily.some(p=>requested==='daily/'+p.id))dailyPage(window.WORLD.season.daily.find(p=>requested==='daily/'+p.id),restore);
  else if(requested.startsWith('comic/')&&window.WORLD.season.comics.some(p=>requested==='comic/'+p.id))comicPage(window.WORLD.season.comics.find(p=>requested==='comic/'+p.id));
