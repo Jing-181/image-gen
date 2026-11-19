@@ -71,7 +71,7 @@ function render(saved=history.state?.world){
  requestAnimationFrame(()=>{if(turn!==navigation)return;
   if(restore){window.scrollTo({top:restore.scrollY||0,behavior:'instant'});if(restore.focusKey)main.querySelector(`[data-focus-key="${CSS.escape(restore.focusKey)}"]`)?.focus({preventScroll:true});}
   else if(isHome&&requested!=='home')document.getElementById(requested)?.scrollIntoView({behavior:'instant'});
-  else{window.scrollTo({top:0,behavior:'instant'});main.focus({preventScroll:true});}
+  else{window.scrollTo({top:0,behavior:'instant'});if(turn>1)main.focus({preventScroll:true});}
   saveView();
  });
 }
@@ -175,10 +175,11 @@ function profilePage(p){
  const e=escapeText,r=rooms.find(r=>r.id===p.id);
  main.innerHTML=`<a class="back-link" data-home-return href="#home">← 回到刚才的位置</a>
  <section class="profile-hero" data-character="${p.id}"><button class="portrait-button" data-picture="${p.id}-portrait" aria-label="放大${e(p.name)}写真"><img class="profile-photo" width="1254" height="1254" src="${assets[p.id+'-portrait']}" alt="${e(p.name)}个人写真"></button><div><h1>${e(p.name)}</h1><h2>${e(p.quote)}</h2><p>${e(p.summary)}</p><p class="status">${e(p.voice)}</p>${shareMarkup()}</div></section>
+ <section class="character-notes" aria-labelledby="character-notes-title" data-character="${p.id}"><div><p class="eyebrow">人物小记</p><h2 id="character-notes-title">${e(p.signature)}</h2><dl><dt>怎么认出${p.id==='yuan'?'他':'她'}</dt><dd>${e(p.appearance)}</dd><dt>桌边的小习惯</dt><dd>${e(p.habit)}</dd></dl></div><button type="button" class="sheet-button" data-picture="${p.id}-sheet" aria-label="放大${e(p.name)}的角色三视图"><img loading="lazy" src="${assets[p.id+'-sheet']}" alt="${e(p.name)}的角色三视图"><span>看角色三视图 ↗</span></button></section>
  ${photoGalleryMarkup(p)}
  <section class="personal-daily"><h2>平时的样子</h2><button class="scene-strip" data-picture="${p.id}-scene" aria-label="放大${e(p.name)}三格日常"><img loading="lazy" src="${assets[p.id+'-scene']}" width="${p.id==='yuu'?2188:2172}" height="724" alt="${e(p.name)}的三格日常"></button><details class="quiet-details"><summary>看看小表情</summary><div class="profile-expression"><div class="expression" data-background="${assets[p.id+'-expressions']}" role="img" aria-label="${e(p.name)}三帧表情"></div><button id="profile-replay">播放表情 ↻</button></div></details></section>
  <section class="personal-room"><h2>${e(p.name)}的房间</h2><p>${e(r.intro)}</p><div class="workbench" data-character="${p.id}"><div class="scene"><img loading="lazy" class="room-image" width="724" height="724" src="${assets[p.id+'-room']}" alt="${e(p.name)}的房间">${r.items.map((item,i)=>`<button class="hotspot" style="left:calc(${item[2]}% - 22px);top:calc(${item[3]}% - 22px)" data-note="${i}" aria-label="查看${item[0]}">＋</button>`).join('')}</div><div class="notes"><div class="room-items">${r.items.map((item,i)=>`<button data-note="${i}" aria-expanded="false">${item[0]} ＋</button>`).join('')}</div><p class="room-note" role="status">选一件小东西，读读它的手记。</p></div></div></section>
- <details class="quiet-details"><summary>更多画像与相处方式</summary><p>${e(p.help)}</p><p>${e(p.relations)}</p><div class="profile-gallery"><div><img class="profile-avatar" loading="lazy" src="${assets[p.id+'-avatar']}" alt="${e(p.name)}头像"><a class="text-link" href="${assets[p.id+'-avatar']}" download="${p.id}-avatar.webp">保存头像</a> <a class="text-link" href="${assets[p.id+'-portrait']}" download="${p.id}-portrait.webp">保存写真</a></div><button class="sheet-button" data-picture="${p.id}-sheet" aria-label="放大三视图"><img loading="lazy" src="${assets[p.id+'-sheet']}" alt="${e(p.name)}三视图"></button></div></details>
+ <details class="quiet-details"><summary>更多画像与相处方式</summary><p>${e(p.help)}</p><p>${e(p.relations)}</p><div><img class="profile-avatar" loading="lazy" src="${assets[p.id+'-avatar']}" alt="${e(p.name)}头像"><a class="text-link" href="${assets[p.id+'-avatar']}" download="${p.id}-avatar.webp">保存头像</a> <a class="text-link" href="${assets[p.id+'-portrait']}" download="${p.id}-portrait.webp">保存写真</a></div></details>
  <div class="reading-end"><a href="#theatre/${window.WORLD.play.id}">看看三人的小剧场</a>${window.WORLD.profiles.filter(x=>x.id!==p.id).map(x=>`<a href="#character/${x.id}">认识${x.name}</a>`).join('')}</div>`;
  mountExpression(main.querySelector('.expression'),main.querySelector('#profile-replay'));
  main.querySelectorAll('[data-note]').forEach(b=>b.onclick=()=>{main.querySelector('.room-note').textContent=r.items[Number(b.dataset.note)][1];main.querySelectorAll('[data-note]').forEach(x=>x.setAttribute('aria-expanded',String(x.dataset.note===b.dataset.note)));});
@@ -198,11 +199,15 @@ function mountExpression(el,button){
  const hidden=()=>{if(document.hidden)stop();};document.addEventListener('visibilitychange',hidden);media.addEventListener('change',changed);show(2);
  viewCleanup.push(()=>{stop();observer.disconnect();document.removeEventListener('visibilitychange',hidden);media.removeEventListener('change',changed);});
 }
-// 首页只保留欢迎、人物、单个推荐和一行近况。
+// 首屏用现有的桌边插画展开，接着是一排可进入的人物索引。
 function homePage(){
  const play=window.WORLD.season.plays[0]||window.WORLD.play;
- main.innerHTML=`<section class="arrival" id="home"><div><h1>灯还亮着，<br>进来坐一会儿。</h1><p>Hanako、源、悠。<br>三个伙伴，一些没用却喜欢的小事。</p></div><img src="${assets.desk}" width="1672" height="941" fetchpriority="high" alt="三位伙伴的桌边日常"></section>
- <section class="home-intros" id="characters"><h2>认识他们</h2><div class="home-people">${window.WORLD.profiles.map((p,i)=>`<a href="#character/${p.id}" data-focus-key="home-${p.id}"><img loading="lazy" src="${assets[p.id+'-avatar']}" width="900" height="900" alt="${p.name}"><div><h3>${p.name}</h3><p>${['先听你说，再一起想。','把问题拆开，认真做好。','先玩一遍，再换个玩法。'][i]}</p></div></a>`).join('')}</div></section>
+ const e=escapeText;
+ main.innerHTML=`<section class="arrival" id="home">
+ <svg class="world-wash" viewBox="0 0 680 240" aria-hidden="true" focusable="false"><circle cx="516" cy="53" r="30"/><path d="M0 210Q95 196 161 143T268 143L316 173Q379 121 438 90T527 117Q599 119 680 196V240H0Z"/><path d="M98 220Q194 179 226 181T359 213Q442 188 499 160T680 218V240H98Z"/></svg>
+ <div class="arrival-copy"><p class="eyebrow">Hanako、源、悠</p><h1>灯还亮着，<br>进来坐一会儿。</h1><p>三个伙伴，一些没用却喜欢的小事。</p><div class="world-actions"><a class="text-link" href="#characters">认识他们</a><a class="plain-link" href="#works">故事与日常</a></div></div>
+ <img class="arrival-art" src="${assets.desk}" width="1672" height="941" fetchpriority="high" alt="三位伙伴的桌边日常"></section>
+ <section class="home-intros" id="characters"><h2>认识他们</h2><div class="home-people">${window.WORLD.profiles.map((p,i)=>`<a href="#character/${p.id}" data-character="${p.id}" data-focus-key="home-${p.id}"><img loading="lazy" src="${assets[p.id+'-avatar']}" width="900" height="900" alt=""><div><h3>${e(p.name)}</h3><p>${['先听你说，再一起想。','把问题拆开，认真做好。','先玩一遍，再换个玩法。'][i]}</p></div><span class="person-arrow" aria-hidden="true">›</span></a>`).join('')}</div></section>
  <section class="home-feature"><a href="#theatre/${play.id}" data-focus-key="home-feature" aria-label="看${escapeText(play.title)}"><img loading="lazy" width="1200" height="900" src="${play.cover}" alt="三人在旧书店的日常短剧"></a><div><p class="status">最近的一件事 · 日常短剧</p><h2>${escapeText(play.title)}</h2><p>${escapeText(play.summary)}</p><a class="text-link" href="#theatre/${play.id}">看这出戏</a><a class="plain-link" href="#works">所有故事与日常</a></div></section>
  <p class="home-news" id="progress">最近：${escapeText(window.WORLD.progress.items[0]?.text||'欢迎来看看三人的日常。')}</p>`;
 }
@@ -217,7 +222,7 @@ function worksPage(filter='all'){
  {type:'daily',route:'desk',image:assets.desk,title:'桌边的小分身',summary:'读一页书，研究键帽，或者一起发呆。'}];
  const labels={all:'全部',plays:'日常短剧',daily:'互动日常',comics:'灯还亮着 · 漫画'};
  if(!labels[filter])filter='all';
- main.innerHTML=`<h1>故事与日常</h1><p class="intro">书店慢慢交接，日子照常往前。挑一件小事，坐下来看看。</p><nav class="work-filters" aria-label="作品分类">${Object.entries(labels).map(([key,label])=>`<a href="#works/${key}" ${key===filter?'aria-current="true"':''}>${label}<span>${key==='all'?items.length:items.filter(p=>p.type===key).length}</span></a>`).join('')}</nav><div class="work-list">${items.filter(p=>filter==='all'||p.type===filter).map(p=>`<article><a href="#${p.route}" data-focus-key="work-${p.route}" aria-label="阅读${e(p.title)}"><img loading="lazy" src="${p.image}" alt="${e(p.title)}"></a><div><p class="status">${labels[p.type]}</p><h2><a href="#${p.route}">${e(p.title)}</a></h2><p>${e(p.summary)}</p></div></article>`).join('')}</div>`;
+ main.innerHTML=`<div class="world-cover"><h1>故事与日常</h1><p class="intro">书店慢慢交接，日子照常往前。挑一件小事，坐下来看看。</p></div><nav class="work-filters" aria-label="作品分类">${Object.entries(labels).map(([key,label])=>`<a href="#works/${key}" ${key===filter?'aria-current="true"':''}>${label}<span>${key==='all'?items.length:items.filter(p=>p.type===key).length}</span></a>`).join('')}</nav><div class="work-list">${items.filter(p=>filter==='all'||p.type===filter).map(p=>`<article><a href="#${p.route}" data-focus-key="work-${p.route}" aria-label="阅读${e(p.title)}"><img loading="lazy" src="${p.image}" alt="${e(p.title)}"></a><div><p class="status">${labels[p.type]}</p><h2><a href="#${p.route}">${e(p.title)}</a></h2><p>${e(p.summary)}</p></div></article>`).join('')}</div>`;
 }
 function playPage(saved,play=window.WORLD.play){
  main.innerHTML=`<a class="back-link" href="#works/plays">← 日常短剧</a><h1>${escapeText(play.title)}</h1><div id="mini-play"></div>${readingEnd()}`;
@@ -255,6 +260,8 @@ function mountLazyMedia(scope){
  viewCleanup.push(()=>observer.disconnect());
  return {observe(root=scope){root.querySelectorAll('img[data-src]').forEach(image=>{if(!image.getAttribute('src'))observer.observe(image);});}};
 }
+// 直接关闭对话框，让禁止表单提交的工作台预览也能使用关闭按钮。
+dialog.querySelector('[data-close-detail]').onclick=()=>dialog.close();
 // 点击遮罩关闭，原生 dialog 保持焦点约束与 Escape 操作。
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 dialog.addEventListener('keydown',event=>{if(!photoViewer||dialog.classList.contains('zoomed')||event.altKey||event.ctrlKey||event.metaKey)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();photoViewer.show(photoViewer.index+(event.key==='ArrowLeft'?-1:1));}});

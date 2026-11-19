@@ -31,14 +31,14 @@ function galleryPage(){
  const q=new URLSearchParams(location.hash.split('?')[1]||'');if(location.hash==='#beach')q.set('theme','海边');
  const actor=q.get('person')||'',theme=q.get('theme')||'',ascending=q.get('sort')==='oldest',works=window.WORLD.gallery.works;
  const rows=works.filter(r=>(!actor||r.characters.includes(actor))&&(!theme||r.theme===theme)).sort((a,b)=>(ascending?1:-1)*a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
- main.innerHTML=`<h1>全部图集</h1><p class="intro">把喜欢的画慢慢收在这里，闲下来再一张张看。</p><form class="gallery-filters"><label>人物<select name="person" data-focus-key="gallery-filter-person"><option value="">所有人物</option>${window.WORLD.profiles.map(p=>`<option value="${p.id}" ${actor===p.id?'selected':''}>${p.name}</option>`).join('')}</select></label><label>主题<select name="theme" data-focus-key="gallery-filter-theme"><option value="">所有主题</option>${[...new Set(works.map(r=>r.theme))].map(t=>`<option ${theme===t?'selected':''}>${escapeText(t)}</option>`).join('')}</select></label><label>时间<select name="sort" data-focus-key="gallery-filter-sort"><option value="newest">从新到旧</option><option value="oldest" ${ascending?'selected':''}>从旧到新</option></select></label></form><p role="status">${rows.length} 件作品</p>${rows.length?galleryCards(rows):'<p>这里暂时没有作品，换个条件看看。</p>'}`;
+ main.innerHTML=`<div class="world-cover"><h1>全部图集</h1><p class="intro">把喜欢的画慢慢收在这里，闲下来再一张张看。</p></div><form class="gallery-filters"><label>人物<select name="person" data-focus-key="gallery-filter-person"><option value="">所有人物</option>${window.WORLD.profiles.map(p=>`<option value="${p.id}" ${actor===p.id?'selected':''}>${p.name}</option>`).join('')}</select></label><label>主题<select name="theme" data-focus-key="gallery-filter-theme"><option value="">所有主题</option>${[...new Set(works.map(r=>r.theme))].map(t=>`<option ${theme===t?'selected':''}>${escapeText(t)}</option>`).join('')}</select></label><label>时间<select name="sort" data-focus-key="gallery-filter-sort"><option value="newest">从新到旧</option><option value="oldest" ${ascending?'selected':''}>从旧到新</option></select></label></form><p role="status">${rows.length} 件作品</p>${rows.length?galleryCards(rows):'<p>这里暂时没有作品，换个条件看看。</p>'}`;
  main.querySelector('form').onchange=e=>{saveView();const params=new URLSearchParams(new FormData(e.currentTarget));location.hash='gallery?'+params.toString();};
  main.querySelector('form').onsubmit=e=>e.preventDefault();mountGalleryPictures();
 }
 function mountSelectedGallery(person){
  const ids=person?window.WORLD.gallery.selections.characters[person]||[]:window.WORLD.gallery.selections.home;
  const existing=person?[person+'-portrait',person+'-scene',person+'-room']:['desk','play-02'];
- const selectors=person?['.profile-hero .portrait-button','.personal-daily','.personal-room']:['.arrival>img','.home-feature'];
+ const selectors=person?['.profile-hero .portrait-button','.personal-daily','.personal-room']:['.arrival-art','.home-feature'];
  existing.forEach((id,i)=>{const el=main.querySelector(selectors[i]);if(el)el.hidden=!ids.includes(id);});
  const rows=ids.filter(id=>!existing.includes(id)).map(id=>window.WORLD.gallery.works.find(r=>r.id===id));
  if(rows.length){main.insertAdjacentHTML('beforeend',`<section><h2>精选画作</h2>${galleryCards(rows)}</section>`);mountGalleryPictures();}
